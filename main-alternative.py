@@ -144,7 +144,10 @@ class Checker:
                 elif input_during_game == "show_order":
                     system("clear")
                     print("The numbers came in this order: ", cls.show_board_in_order)
-                elif input_during_game == "show_board":
+                else:
+                    input_number = int(input_during_game)
+                    cls.input_stream_from_host.add(input_number)
+                    cls.show_board_in_order.append(input_number)
                     system("clear")
                     print("BOARD")
                     for i in range(1, 91):
@@ -161,12 +164,8 @@ class Checker:
                     print("\n")
                     print("The numbers came in this order: ", cls.show_board_in_order)
                     print("\n")
-                else:
-                    input_number = int(input_during_game)
-                cls.input_stream_from_host.add(input_number)
-                cls.show_board_in_order.append(input_number)
-                cls.print_status()
-                cls.did_i_win_yet()
+                    cls.print_status()
+                    cls.did_i_win_yet()
             except:
                 print("Not a valid number, please enter a valid number")
                 continue
