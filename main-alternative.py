@@ -74,7 +74,7 @@ class Checker:
 
     @classmethod
     def generate_ticket_txt(cls):
-        with open("my_ticket.txt", "w") as wfile:
+        with open("my_ticket2.txt", "w") as wfile:
             wfile.write(str(cls.my_ticket) + "\n")
             wfile.write(str(cls.sorted_ticket) + "\n")
             wfile.write(str(cls.patterns_dict))
@@ -100,7 +100,7 @@ class Checker:
             ticket = cls.sorted_ticket
         if patterns is None:
             patterns = cls.patterns_dict
-        print("My Ticket: ")
+        print(colored("My Ticket: ", "cyan"))
         for i, num in enumerate(ticket):
 
             num_str = str(num).zfill(2)
@@ -116,7 +116,7 @@ class Checker:
                 else:
                     print(num_str, end=" " * 8)
 
-        print("\nPatterns and your numbers")
+        print(colored("\nPatterns and your numbers:", "cyan"))
         for k, v in patterns.items():
             print(k.ljust(20), end=" ")
             for pnum in v:
@@ -135,8 +135,7 @@ class Checker:
 
     @classmethod
     def print_board(cls):
-        system("clear")
-        print("BOARD")
+        print(colored("BOARD:", "cyan"))
         for i in range(1, 91):
             if i in cls.input_stream_from_host:
                 if i % 10 == 0:
@@ -148,12 +147,15 @@ class Checker:
                     print(str(i).zfill(2))
                 else:
                     print(str(i).zfill(2), end=" " * 8)
+        print("\nThe numbers came in this order: ", cls.show_board_in_order)
 
     @classmethod
     def verify_input(cls):
         game_over_flag = False
+        first_time_verify_flag = True
         while not game_over_flag:
             try:
+                print("")
                 input_during_game = input("Enter the number from host: ")
                 if input_during_game == "gg":
                     game_over_flag = True
@@ -162,18 +164,21 @@ class Checker:
                     print("The numbers came in this order: ", cls.show_board_in_order)
                 elif input_during_game in cls.patterns_dict_flags:
                     cls.patterns_dict_flags[input_during_game] = True
-                    print("marking this pattern as done, we wont be notifying you on completion of this pattern")
+                    print(colored("marking this pattern as done,we wont be notifying you on completion of this pattern",
+                                  "yellow"))
                 else:
                     input_number = int(input_during_game)
                     cls.input_stream_from_host.add(input_number)
                     cls.show_board_in_order.append(input_number)
+                    system("clear")
                     cls.print_board()
-                    print("\n")
-                    print("The numbers came in this order: ", cls.show_board_in_order)
-                    print("\n")
                     if input_number in cls.my_ticket:
-                        print(colored("!!!!!!!!!!!mark the ticket, {} is on your ticket!!!!!!!!!".format(input_number),
+                        print(colored("\n--------- Mark the ticket, {} is on your ticket --------".format(input_number),
                                       "yellow"))
+                    else:
+                        print(colored("\n--------- Never Mind, {} was not on your ticket --------".format(input_number),
+                                      "magenta"))
+                    print("")
                     cls.print_status()
                     cls.did_i_win_yet()
             except:
@@ -196,12 +201,14 @@ class Checker:
         for k, v in cls.patterns_dict_flags.items():
             if not v:
                 if len(cls.patterns_dict[k] - cls.input_stream_from_host) == 0:
-                    print("***************************************************")
-                    print("**congratulations on winning Pattern {}*******".format(k))
-                    print("***************************************************")
+                    print("")
+                    print("*****************************************************")
+                    print("Congratulations on winning the Pattern {}".format(k))
+                    print("*****************************************************")
                     cls.patterns_dict_flags[k] = True
                 if len(cls.patterns_dict[k] - cls.input_stream_from_host) == 1:
-                    print(colored("**********Just 1 left for winning Pattern {}**************".format(k), "blue"))
+                    print("")
+                    print(colored("******Just 1 left for winning the Pattern {} ******".format(k), "blue"))
         return
 
 
@@ -229,9 +236,9 @@ def main():
     file_stored = FileStorage()
     continue_with_existing_ticket = False
 
-    if path.exists("my_ticket.txt"):
+    if path.exists("my_ticket2.txt"):
         print("There seems to be a ticket already generated :) ")
-        file_stored.get_from_file("my_ticket.txt")
+        file_stored.get_from_file("my_ticket2.txt")
         checker.print_status(file_stored.stored_sorted_ticket, file_stored.stored_patterns_dict)
         check_for_valid_ticket = input("is this your ticket? type yes to confirm and no to generate a new ticket: ")
         if check_for_valid_ticket == "yes":
@@ -249,7 +256,10 @@ def main():
         checker.get_input_ticket_numbers()
         checker.get_input_winning_patterns()
         checker.generate_ticket_txt()
+    checker.print_board()
+    print(colored("\n-------------Ticket Updates will be shown here ------------------", "green"))
     checker.print_status()
+    print(colored("\nStarting the game now....", "yellow"))
     checker.verify_input()
 
 
