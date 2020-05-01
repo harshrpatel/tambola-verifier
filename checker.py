@@ -60,7 +60,7 @@ class Checker:
                     if patten_done == "yes":
                         done_with_individual_pattern = True
                         input_for_pattern_done = True
-                        cls.patterns_dict[pattern_name] = pattern_set
+                        cls.patterns_dict[pattern_name] = list(pattern_set)
             print(cls.patterns_dict)
 
     @classmethod
@@ -134,7 +134,7 @@ class Verify:
         self.remaining_ticket = sorted_ticket
 
     def get_remaining_ticket(self):
-        if int(input_num) in self.remaining_ticket:
+        if int(self.input_num) in self.remaining_ticket:
             self.remaining_ticket.remove(int(input_num))
         print(self.remaining_ticket)
 
@@ -142,6 +142,26 @@ class Verify:
         new_tkt = self.ticket
         self.ticket = [strike_through(x) if x in list(set(self.ticket) - set(self.remaining_ticket)) else x for x in new_tkt]
         print(self.ticket)
+
+    def check_variations(self):
+        remaining_variation = {}
+        print(self.variations)
+        try:
+            for i in self.variations:
+                print(i)
+                print(self.variations[i])
+                if int(self.input_num) in self.variations[i]:
+                    self.variations[i].remove(int(self.input_num))
+                remaining_variation[i] = self.variations[i]
+                if len(remaining_variation[i]) < 1:
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    print("Congratulations, for your ticket variation {} is successfully done!".format(i))
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(remaining_variation)
+
+        except Exception as err:
+            print(err)
+
 
 
 def strike_through(num: int) -> str:
@@ -181,8 +201,10 @@ def main():
 if __name__ == '__main__':
     sort_ticket = [1, 2, 3, 4, 5]
     my_ticket = [1, 2, 3, 4, 5]
+    patterns = {'a': [1, 2], 'b': [3, 4], 'c': [3,1]}
     while True:
         input_num = input("Enter any number:")
-        verify = Verify(sort_ticket, my_ticket, input_num)
+        verify = Verify(sort_ticket, my_ticket, input_num, pattern_dict=patterns)
         verify.get_remaining_ticket()
         verify.get_scratched_ticket()
+        verify.check_variations()
