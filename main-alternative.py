@@ -1,12 +1,16 @@
 import ast
 from os import system
 from os import path
+from termcolor import colored
 
 
 class Checker:
     my_ticket = set()
     sorted_ticket = list()
     patterns_dict = dict()
+    input_stream_from_host = set()
+    patterns_dict_flags = dict()
+    show_board_in_order = list()
 
     @classmethod
     def get_input_ticket_numbers(cls):
@@ -65,11 +69,14 @@ class Checker:
             system("clear")
             print(cls.patterns_dict)
 
+        for k in cls.patterns_dict:
+            cls.patterns_dict_flags[k] = False
+
     @classmethod
     def generate_ticket_txt(cls):
         with open("my_ticket.txt", "w") as wfile:
-            wfile.write(str(cls.my_ticket)+"\n")
-            wfile.write(str(cls.sorted_ticket)+"\n")
+            wfile.write(str(cls.my_ticket) + "\n")
+            wfile.write(str(cls.sorted_ticket) + "\n")
             wfile.write(str(cls.patterns_dict))
 
     @classmethod
@@ -84,26 +91,106 @@ class Checker:
         cls.sorted_ticket = sorted_from_file
         cls.patterns_dict = patterns_from_file
 
+        for k in cls.patterns_dict:
+            cls.patterns_dict_flags[k] = False
+
     @classmethod
     def print_status(cls, ticket=None, patterns=None):
         if ticket is None:
             ticket = cls.sorted_ticket
         if patterns is None:
             patterns = cls.patterns_dict
-
         print("My Ticket: ")
         for i, num in enumerate(ticket):
-            if i in [4, 9, 13, 18, 23]:
-                print(str(num).zfill(2))
-            elif i == 12:
-                print("X " + " " * 8 + str(num).zfill(2), end=" " * 8)
+
+            num_str = str(num).zfill(2)
+
+            if i in [4, 9, 13, 19, 24]:
+                if num in cls.input_stream_from_host:
+                    print(colored(cls.strike_through(num_str), "red"))
+                else:
+                    print(num_str)
             else:
-                print(str(num).zfill(2), end=" " * 8)
+                if num in cls.input_stream_from_host:
+                    print(colored(cls.strike_through(num_str), "red"), end=" " * 8)
+                else:
+                    print(num_str, end=" " * 8)
 
         print("\nPatterns and your numbers")
         for k, v in patterns.items():
             print(k, end=" ")
-            print(v)
+            for pnum in v:
+                if pnum in cls.input_stream_from_host:
+                    print(colored(cls.strike_through(pnum), "red"), end=" ")
+                else:
+                    print(pnum, end=" ")
+            print()
+
+    @classmethod
+    def strike_through(cls, num):
+        result = ''
+        for c in str(num):
+            result = result + c + '\u0336'
+        return result
+
+    @classmethod
+    def verify_input(cls):
+        game_over_flag = False
+        while not game_over_flag:
+            try:
+                input_during_game = input("Enter the number from host: ")
+                if input_during_game == "gg":
+                    game_over_flag = True
+                elif input_during_game == "show_order":
+                    system("clear")
+                    print("The numbers came in this order: ", cls.show_board_in_order)
+                else:
+                    input_number = int(input_during_game)
+                    cls.input_stream_from_host.add(input_number)
+                    cls.show_board_in_order.append(input_number)
+                    system("clear")
+                    print("BOARD")
+                    for i in range(1, 91):
+                        if i in cls.input_stream_from_host:
+                            if i % 10 == 0:
+                                print(colored(str(i).zfill(2), "green"))
+                            else:
+                                print(colored(str(i).zfill(2), "green"), end=" " * 8)
+                        else:
+                            if i % 10 == 0:
+                                print(str(i).zfill(2))
+                            else:
+                                print(str(i).zfill(2), end=" " * 8)
+                    print("\n")
+                    print("The numbers came in this order: ", cls.show_board_in_order)
+                    print("\n")
+                    cls.print_status()
+                    cls.did_i_win_yet()
+            except:
+                print("Not a valid number, please enter a valid number")
+                continue
+
+
+    @classmethod
+    def did_i_win_yet(cls):
+        won_full_house_yet = False
+        if not won_full_house_yet:
+            if len(cls.my_ticket - cls.input_stream_from_host) == 0:
+                print("***************************************************")
+                print("******congratulations on winning full house********")
+                print("***************************************************")
+                won_full_house_yet = True
+            if len(cls.my_ticket - cls.input_stream_from_host) == 0:
+                print(colored("*********You just have one left for winning FULL HOUSE ********", "blue"))
+
+        for k, v in cls.patterns_dict_flags.items():
+            if not v:
+                if len(cls.patterns_dict[k] - cls.input_stream_from_host) == 0:
+                    print("***************************************************")
+                    print("**congratulations on winning Pattern {}*******".format(k))
+                    print("***************************************************")
+                    cls.patterns_dict_flags[k] = True
+        return
 
 
 class FileStorage:
@@ -151,6 +238,7 @@ def main():
         checker.get_input_winning_patterns()
         checker.generate_ticket_txt()
     checker.print_status()
+    checker.verify_input()
 
 
 if __name__ == '__main__':
