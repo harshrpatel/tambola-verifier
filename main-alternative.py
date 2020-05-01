@@ -142,9 +142,11 @@ class Checker:
                 if input_during_game == "gg":
                     game_over_flag = True
                 elif input_during_game == "show_order":
+                    system("clear")
                     print("The numbers came in this order: ", cls.show_board_in_order)
                 elif input_during_game == "show_board":
                     system("clear")
+                    print("BOARD")
                     for i in range(1, 91):
                         if i in cls.input_stream_from_host:
                             if i % 10 == 0:
@@ -156,16 +158,19 @@ class Checker:
                                 print(str(i).zfill(2))
                             else:
                                 print(str(i).zfill(2), end=" " * 8)
-                    print("\n\n")
+                    print("\n")
+                    print("The numbers came in this order: ", cls.show_board_in_order)
+                    print("\n")
                 else:
                     input_number = int(input_during_game)
+                cls.input_stream_from_host.add(input_number)
+                cls.show_board_in_order.append(input_number)
+                cls.print_status()
+                cls.did_i_win_yet()
             except:
                 print("Not a valid number, please enter a valid number")
                 continue
-            cls.input_stream_from_host.add(input_number)
-            cls.show_board_in_order.append(input_number)
-            cls.print_status()
-            cls.did_i_win_yet()
+
 
     @classmethod
     def did_i_win_yet(cls):
@@ -176,6 +181,8 @@ class Checker:
                 print("******congratulations on winning full house********")
                 print("***************************************************")
                 won_full_house_yet = True
+            if len(cls.my_ticket - cls.input_stream_from_host) == 0:
+                print(colored("*********You just have one left for winning FULL HOUSE ********", "blue"))
 
         for k, v in cls.patterns_dict_flags.items():
             if not v:
