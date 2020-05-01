@@ -128,7 +128,7 @@ class Main:
     continue_with_existing_ticket = False
 
     if path.exists("my_ticket.txt"):
-        print("There seems to be ticket already generated :) ")
+        print("There seems to be a ticket already generated :) ")
         fileStored.get_from_file("my_ticket.txt")
         checker.print_status(fileStored.stored_sorted_ticket, fileStored.stored_patterns_dict)
         check_for_valid_ticket = input("is this your ticket? type yes to confirm and no to generate a new ticket: ")
@@ -141,6 +141,7 @@ class Main:
             fileStored.stored_sorted_ticket,
             fileStored.stored_patterns_dict)
     else:
+        print("Lets generate a new ticket for you")
         checker.get_input_ticket_numbers()
         checker.get_input_winning_patterns()
         checker.generate_ticket_txt()
