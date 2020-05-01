@@ -1,5 +1,14 @@
 import ast
 from os import path
+from os import system
+import time
+import numpy as np
+import tableformatter as tf
+from colorama import Back
+BACK_RESET = Back.RESET
+BACK_GREEN = Back.MAGENTA
+BACK_BLUE = Back.BLACK
+SHAPE = (5, 5)
 
 
 class Checker:
@@ -59,7 +68,7 @@ class Checker:
                     if patten_done == "yes":
                         done_with_individual_pattern = True
                         input_for_pattern_done = True
-                        cls.patterns_dict[pattern_name] = pattern_set
+                        cls.patterns_dict[pattern_name] = list(pattern_set)
             print(cls.patterns_dict)
 
     @classmethod
@@ -122,7 +131,70 @@ class FileStorage:
                     cls.stored_patterns_dict = obj
 
 
-class Main:
+class Verify:
+
+    def __init__(self, sorted_ticket, my_ticket, input_num, pattern_dict=None):
+        self.ticket = my_ticket
+        self.variations = pattern_dict
+        self.input_num = input_num
+        # if file_name:
+        #     self.file_name = file_name
+        self.remaining_ticket = sorted_ticket
+
+
+    def get_remaining_ticket(self):
+        if int(self.input_num) in self.remaining_ticket:
+            self.remaining_ticket.remove(int(self.input_num))
+        np_remained = np.array(self.remaining_ticket)
+        if len(self.remaining_ticket) == 0:
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("congratulations on winning full house!")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            exit(0)
+        # print(np_remained)
+        # print(tf.generate_table(np_remained), grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE))
+
+    def get_scratched_ticket(self):
+        new_tkt = self.ticket
+        self.ticket = [strike_through(x) if x in list(set(self.ticket) - set(self.remaining_ticket)) else x for x in new_tkt]
+        np_ticket = np.array(self.ticket)
+        np_ticket = np_ticket.reshape(SHAPE)
+        print(tf.generate_table(np_ticket, grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE)))
+
+    def check_variations(self):
+        remaining_variation = {}
+        try:
+            for i in self.variations:
+                if int(self.input_num) in self.variations[i]:
+                    self.variations[i].remove(int(self.input_num))
+                remaining_variation[i] = self.variations[i]
+                if len(remaining_variation[i]) == 1:
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    print("Almost there, only one number remaining to claim variation {}: {}".format(i,
+                                                                                                     remaining_variation[i]))
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                print("****", done_variation, "****")
+                if not done_variation[i]:
+                    if len(remaining_variation[i]) < 1:
+                        done_variation[i] = True
+                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        print("Congratulations, for your ticket variation {} is successfully done!".format(i))
+                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        del remaining_variation[i]
+            print(remaining_variation)
+
+        except Exception as err:
+            print(err)
+
+
+def strike_through(num: int) -> str:
+    result = ''
+    for c in str(num):
+        result = result + c + '\u0336'
+    return result
+
+
+def main():
     checker = Checker()
     fileStored = FileStorage()
     continue_with_existing_ticket = False
@@ -146,7 +218,28 @@ class Main:
         checker.get_input_winning_patterns()
         checker.generate_ticket_txt()
     checker.print_status()
+    my_ticket = checker.my_ticket
+    sorted_list = checker.sorted_ticket
+    variation_dict = checker.patterns_dict
+    # time.sleep(2)
+    # system("clear")
+    # print(my_ticket)
+    game_not_ended = True
+    global done_variation
+    done_variation = dict.fromkeys(variation_dict.keys(), False)
+
+    while game_not_ended:
+        input_num = input("Enter any number:")
+        if input_num == "bye":
+            game_not_ended = False
+        verify = Verify(sorted_list, list(my_ticket), input_num, pattern_dict=variation_dict)
+        verify.get_remaining_ticket()
+        # verify.get_scratched_ticket()
+        verify.check_variations()
+        verify.get_scratched_ticket()
+    print("Game has ended!")
 
 
 if __name__ == '__main__':
-    Main()
+    main()
+
