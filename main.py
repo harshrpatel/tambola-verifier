@@ -4,12 +4,19 @@ from os import system
 import time
 import numpy as np
 import tableformatter as tf
+# from termcolor import colored, cprint
+import colored
+from colored import fore, back, style, stylize
+from pprint import pprint
 from colorama import Back
+from fireworks import run_fireworks
 BACK_RESET = Back.RESET
 BACK_GREEN = Back.MAGENTA
 BACK_BLUE = Back.BLACK
 SHAPE = (5, 5)
 
+
+global previous_numbers
 
 class Checker:
     my_ticket = set()
@@ -143,14 +150,16 @@ class Verify:
 
 
     def get_remaining_ticket(self):
-        if int(self.input_num) in self.remaining_ticket:
-            self.remaining_ticket.remove(int(self.input_num))
-        np_remained = np.array(self.remaining_ticket)
-        if len(self.remaining_ticket) == 0:
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("congratulations on winning full house!")
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            exit(0)
+        try:
+            if int(self.input_num) in self.remaining_ticket:
+                self.remaining_ticket.remove(int(self.input_num))
+            np_remained = np.array(self.remaining_ticket)
+            if len(self.remaining_ticket) == 0:
+                print(fore.GREEN + "Congratulations on winning full house!")
+                run_fireworks()
+                exit(0)
+        except ValueError:
+            pass
         # print(np_remained)
         # print(tf.generate_table(np_remained), grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE))
 
@@ -169,19 +178,21 @@ class Verify:
                     self.variations[i].remove(int(self.input_num))
                 remaining_variation[i] = self.variations[i]
                 if len(remaining_variation[i]) == 1:
-                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print("Almost there, only one number remaining to claim variation {}: {}".format(i,
-                                                                                                     remaining_variation[i]))
-                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                print("****", done_variation, "****")
+                    print(fore.LIGHT_BLUE + "Almost there, only one number remaining to claim variation",
+                          style.RESET, fore.RED, style.BOLD, "{}: {}".format(i, remaining_variation[i]), style.RESET,
+                          "\n")
                 if not done_variation[i]:
                     if len(remaining_variation[i]) < 1:
                         done_variation[i] = True
-                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                        print("Congratulations, for your ticket variation {} is successfully done!".format(i))
-                        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        print(fore.GREEN, style.BOLD,
+                              "Congratulations, for your ticket variation {} is successfully done!".format(i) + style.RESET,
+                              "\n")
                         del remaining_variation[i]
-            print(remaining_variation)
+            key_format = "\033[1;32m"
+            value_format = "\033[1;34m"
+            for key, value in remaining_variation.items():
+                # print(fore.BLACK, back.DODGER_BLUE_2, key, fore.BLACK, value, style.RESET)
+                print("{}{} {}{}".format((key_format+key).ljust(20), '\t', value_format, value))
 
         except Exception as err:
             print(err)
@@ -227,17 +238,25 @@ def main():
     game_not_ended = True
     global done_variation
     done_variation = dict.fromkeys(variation_dict.keys(), False)
-
+    previous_numbers = []
     while game_not_ended:
+
         input_num = input("Enter any number:")
         if input_num == "bye":
             game_not_ended = False
+            continue
+        if str(input_num) in variation_dict.keys():
+            del variation_dict[str(input_num)]
+            continue
+        system("clear")
+        previous_numbers.append(input_num)
+        print(fore.LIGHT_BLUE, style.BLINK, previous_numbers[::-1], style.RESET, "\n")
         verify = Verify(sorted_list, list(my_ticket), input_num, pattern_dict=variation_dict)
         verify.get_remaining_ticket()
         # verify.get_scratched_ticket()
         verify.check_variations()
         verify.get_scratched_ticket()
-    print("Game has ended!")
+    print("Game has ended!\n")
 
 
 if __name__ == '__main__':
