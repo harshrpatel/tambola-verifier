@@ -134,6 +134,22 @@ class Checker:
         return result
 
     @classmethod
+    def print_board(cls):
+        system("clear")
+        print("BOARD")
+        for i in range(1, 91):
+            if i in cls.input_stream_from_host:
+                if i % 10 == 0:
+                    print(colored(str(i).zfill(2), "green"))
+                else:
+                    print(colored(str(i).zfill(2), "green"), end=" " * 8)
+            else:
+                if i % 10 == 0:
+                    print(str(i).zfill(2))
+                else:
+                    print(str(i).zfill(2), end=" " * 8)
+
+    @classmethod
     def verify_input(cls):
         game_over_flag = False
         while not game_over_flag:
@@ -151,19 +167,7 @@ class Checker:
                     input_number = int(input_during_game)
                     cls.input_stream_from_host.add(input_number)
                     cls.show_board_in_order.append(input_number)
-                    system("clear")
-                    print("BOARD")
-                    for i in range(1, 91):
-                        if i in cls.input_stream_from_host:
-                            if i % 10 == 0:
-                                print(colored(str(i).zfill(2), "green"))
-                            else:
-                                print(colored(str(i).zfill(2), "green"), end=" " * 8)
-                        else:
-                            if i % 10 == 0:
-                                print(str(i).zfill(2))
-                            else:
-                                print(str(i).zfill(2), end=" " * 8)
+                    cls.print_board()
                     print("\n")
                     print("The numbers came in this order: ", cls.show_board_in_order)
                     print("\n")
