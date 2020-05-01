@@ -105,7 +105,7 @@ class Checker:
 
             num_str = str(num).zfill(2)
 
-            if i in [4, 9, 13, 19, 24]:
+            if i in [4, 9, 14, 19, 24]:
                 if num in cls.input_stream_from_host:
                     print(colored(cls.strike_through(num_str), "red"))
                 else:
@@ -164,6 +164,9 @@ class Checker:
                     print("\n")
                     print("The numbers came in this order: ", cls.show_board_in_order)
                     print("\n")
+                    if input_number in cls.my_ticket:
+                        print(colored("!!!!!!!!!!!mark the ticket, {} is on your ticket!!!!!!!!!".format(input_number),
+                                      "yellow"))
                     cls.print_status()
                     cls.did_i_win_yet()
             except:
@@ -190,6 +193,8 @@ class Checker:
                     print("**congratulations on winning Pattern {}*******".format(k))
                     print("***************************************************")
                     cls.patterns_dict_flags[k] = True
+                if len(cls.patterns_dict[k] - cls.input_stream_from_host) == 1:
+                    print(colored("**********Just 1 left for winning Patter{}**************".format(k), "blue"))
         return
 
 
