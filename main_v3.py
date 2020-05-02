@@ -9,8 +9,8 @@ from termcolor import colored
 
 
 def main():
-    ticket_path = "asset/bollywood_ticket.txt"
-    board_path = "asset/bollywood_board.txt"
+    ticket_path = "asset/cricket_ticket.txt"
+    board_path = "asset/cricket_board.txt"
 
     continue_with_existing_ticket = False
     continue_with_existing_board = False

@@ -52,10 +52,29 @@ class TicketStatus:
             print(key.ljust(20), end=" ")
             for pattern_value in value:
                 if pattern_value in registered_numbers_set:
-                    print(colored(pattern_value, "red"), end=" --- ")
+                    print(colored(pattern_value, "red"), end=" -- ")
                 else:
-                    print(pattern_value, end=" --- ")
+                    print(pattern_value, end=" -- ")
             print("")
+
+        remaining_for_full_house = set(cls.ticket) - registered_numbers_set
+        if len(remaining_for_full_house) == 0:
+            print("Congratulations on winning house")
+        if len(remaining_for_full_house) == 1:
+            print("Just 1 left for winning trophy, remaining ->", end=" ")
+            for element in remaining_for_full_house:
+                print(element)
+
+        for k, v in cls.pattern_dict_completion_flags.items():
+            if not v:
+                remaining_for_pattern_completion = cls.pattern_dict[k] - registered_numbers_set
+                if len(remaining_for_pattern_completion) == 0:
+                    print("Congratulations on winning pattern {}".format(k))
+                    cls.pattern_dict_completion_flags[k] = True
+                if len(cls.pattern_dict[k] - registered_numbers_set) == 1:
+                    print("Just on 1 left for winning {} ->".format(k), end= " ")
+                    for element in remaining_for_pattern_completion:
+                        print(element)
 
     @classmethod
     def strike_through(cls, cell):

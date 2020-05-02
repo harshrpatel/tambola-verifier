@@ -1,6 +1,7 @@
 from termcolor import colored
 from fuzzywuzzy import process
-
+from iterfzf import iterfzf
+    
 
 class RegisterInput:
     registered_numbers = list()
@@ -30,6 +31,7 @@ class RegisterInput:
         while not valid_input_provided:
             try:
                 input_during_game = input(colored("\nEnter the number from host: ", "blue"))
+                # input_during_game = input(iterfzf(cls.current_board, multi=False, extended= False))
                 f_list = process.extractBests(input_during_game, cls.current_board, limit=3, score_cutoff=80)
                 f_dict = {}
 
@@ -60,8 +62,8 @@ class RegisterInput:
                     cls.text_to_display_from_input = colored("\nThis is input is removed for "
                                                              "register inputs: {}".format(what_to_remove), "magenta")
                 elif input_during_game == "unmark":
-                    what_to_unmark = input("What do wish to unmark: ")
-                    cls.pattern_dict_completion_flags[what_to_unmark] = True
+                    what_to_unmark = input("What do wish to unmark?: ")
+                    cls.pattern_dict_completion_flags[what_to_unmark] = False
                     cls.text_to_display_from_input = colored("\nThis is pattern is now unmarked"
                                                              ": {}".format(what_to_unmark), "magenta")
 
@@ -74,18 +76,26 @@ class RegisterInput:
                         cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket "
                                                                  "--------".format(input_during_game), "magenta")
                 elif len(f_list) > 0:
+
                     print(colored("\nDid you any of the following?: ", "blue"))
                     for k, v in f_dict.items():
                         print("type {} for {}".format(k, v))
-                    input_from_fuzzy = int(input(colored("\ntype your choice here: ", "blue")))
+                    input_from_fuzzy = int(input(colored("\ntype your choice here or 0 for none: ", "blue")))
                     input_during_game = f_dict[input_from_fuzzy]
-                    cls.registered_numbers.append(input_during_game)
-                    if input_during_game in cls.ticket:
-                        cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your ticket "
-                                                                 "--------".format(input_during_game), "yellow")
+
+                    if input_during_game in cls.registered_numbers:
+                        cls.text_to_display_from_input = colored("\nThis value was already added and account "
+                                                                 "for: {}".format(input_during_game), "magenta")
                     else:
-                        cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket "
-                                                                 "--------".format(input_during_game), "magenta")
+                        cls.registered_numbers.append(input_during_game)
+                        if input_during_game in cls.ticket:
+                            cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your "
+                                                                     "ticket --------".format(input_during_game),
+                                                                     "yellow")
+                        else:
+                            cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your "
+                                                                     "ticket --------".format(input_during_game),
+                                                                     "magenta")
                 else:
                     raise
 
