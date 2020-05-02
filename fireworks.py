@@ -20,10 +20,10 @@ def demo(screen):
     ]
     for _ in range(20):
         fireworks = [
-            (PalmFirework, 25, 30),
-            (StarFirework, 25, 35),
-            (RingFirework, 20, 30),
-            (SerpentFirework, 30, 35),
+            (PalmFirework, 15, 20),
+            (StarFirework, 15, 20),
+            (RingFirework, 10, 20),
+            (SerpentFirework, 20, 25),
         ]
         firework, start, stop = choice(fireworks)
         effects.insert(

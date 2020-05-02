@@ -11,8 +11,8 @@ from pprint import pprint
 from colorama import Back
 from fireworks import run_fireworks
 BACK_RESET = Back.RESET
-BACK_GREEN = Back.MAGENTA
-BACK_BLUE = Back.BLACK
+BACK_GREEN = back.GREY_15
+BACK_BLUE = back.DODGER_BLUE_2
 SHAPE = (5, 5)
 
 
@@ -148,7 +148,6 @@ class Verify:
         #     self.file_name = file_name
         self.remaining_ticket = sorted_ticket
 
-
     def get_remaining_ticket(self):
         try:
             if int(self.input_num) in self.remaining_ticket:
@@ -165,7 +164,7 @@ class Verify:
 
     def get_scratched_ticket(self):
         new_tkt = self.ticket
-        self.ticket = [strike_through(x) if x in list(set(self.ticket) - set(self.remaining_ticket)) else x for x in new_tkt]
+        self.ticket = [strike_through(x) if x in list(set(self.ticket) - set(self.remaining_ticket)) else "\033[1;31m"+str(x)+"\033[1;31m" for x in new_tkt]
         np_ticket = np.array(self.ticket)
         np_ticket = np_ticket.reshape(SHAPE)
         print(tf.generate_table(np_ticket, grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE)))
@@ -190,6 +189,7 @@ class Verify:
                         del remaining_variation[i]
             key_format = "\033[1;32m"
             value_format = "\033[1;34m"
+
             for key, value in remaining_variation.items():
                 # print(fore.BLACK, back.DODGER_BLUE_2, key, fore.BLACK, value, style.RESET)
                 print("{}{} {}{}".format((key_format+key).ljust(20), '\t', value_format, value))
@@ -203,6 +203,22 @@ def strike_through(num: int) -> str:
     for c in str(num):
         result = result + c + '\u0336'
     return result
+
+
+def print_board(numbers_called):
+    system("clear")
+    print("BOARD")
+    for i in range(1, 91):
+        if str(i) in numbers_called:
+            if i % 10 == 0:
+                print(fore.GREEN, str(i).zfill(2))
+            else:
+                print(fore.GREEN, str(i).zfill(2), end=" " * 8)
+        else:
+            if i % 10 == 0:
+                print(fore.RED, str(i).zfill(2))
+            else:
+                print(fore.RED, str(i).zfill(2), end=" " * 8)
 
 
 def main():
@@ -250,7 +266,10 @@ def main():
             continue
         system("clear")
         previous_numbers.append(input_num)
-        print(fore.LIGHT_BLUE, style.BLINK, previous_numbers[::-1], style.RESET, "\n")
+        if input_num == "board":
+            print_board(previous_numbers)
+            continue
+        print(fore.LIGHT_BLUE, style.BLINK, "Numbers called out so far: ", previous_numbers[::-1], style.RESET, "\n")
         verify = Verify(sorted_list, list(my_ticket), input_num, pattern_dict=variation_dict)
         verify.get_remaining_ticket()
         # verify.get_scratched_ticket()
