@@ -1,6 +1,7 @@
 import ast
 from os import path
 from os import system
+import argparse
 import time
 import numpy as np
 import tableformatter as tf
@@ -10,10 +11,11 @@ from colored import fore, back, style, stylize
 from pprint import pprint
 from colorama import Back
 from fireworks import run_fireworks
+import constants
+
 BACK_RESET = Back.RESET
 BACK_GREEN = back.GREY_15
 BACK_BLUE = back.DODGER_BLUE_2
-SHAPE = (5, 5)
 
 
 global previous_numbers
@@ -34,7 +36,10 @@ class Checker:
                 first_time_flag = False
             else:
                 response = input("Please enter the remaining numbers or numbers to remove(if chosen this option): ")
-            response_list = filter(None, [int(x.strip()) for x in response.split(",")])
+            try:
+                response_list = filter(None, [int(x.strip()) for x in response.split(",")])
+            except ValueError:
+                response_list = filter(None, [(x.strip()) for x in response.split(",")])
             if remove_numbers_flag:
                 cls.my_ticket = cls.my_ticket - set(response_list)
             else:
@@ -68,7 +73,10 @@ class Checker:
                 input_for_pattern_done = False
                 while not input_for_pattern_done:
                     input_for_pattern = input("Enter the numbers for this pattern: ")
-                    pattern_set = set(filter(None, [int(x.strip()) for x in input_for_pattern.split(",")]))
+                    try:
+                        pattern_set = set(filter(None, [int(x.strip()) for x in input_for_pattern.split(",")]))
+                    except ValueError:
+                        pattern_set = set(filter(None, [(x.strip()) for x in input_for_pattern.split(",")]))
                     print("does this pattern for " + pattern_name + " look fine? ", pattern_set)
                     patten_done = input("Type yes for done, if not, sorry you would have retype all the "
                                         "numbers again for this pattern: ")
@@ -150,15 +158,16 @@ class Verify:
 
     def get_remaining_ticket(self):
         try:
-            if int(self.input_num) in self.remaining_ticket:
-                self.remaining_ticket.remove(int(self.input_num))
-            np_remained = np.array(self.remaining_ticket)
-            if len(self.remaining_ticket) == 0:
-                print(fore.GREEN + "Congratulations on winning full house!")
-                run_fireworks()
-                exit(0)
+            self.input_num = int(self.input_num)
         except ValueError:
-            pass
+            self.input_num = self.input_num
+        if self.input_num in self.remaining_ticket:
+            self.remaining_ticket.remove(self.input_num)
+        np_remained = np.array(self.remaining_ticket)
+        if len(self.remaining_ticket) == 0:
+            print(fore.GREEN + "Congratulations on winning full house!")
+            run_fireworks()
+            exit(0)
         # print(np_remained)
         # print(tf.generate_table(np_remained), grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE))
 
@@ -166,15 +175,20 @@ class Verify:
         new_tkt = self.ticket
         self.ticket = [strike_through(x) if x in list(set(self.ticket) - set(self.remaining_ticket)) else "\033[1;31m"+str(x)+"\033[1;31m" for x in new_tkt]
         np_ticket = np.array(self.ticket)
-        np_ticket = np_ticket.reshape(SHAPE)
+        shape = constants.NUMPY_SHAPE[len(self.ticket)]
+        np_ticket = np_ticket.reshape(shape[0], shape[1])
         print(tf.generate_table(np_ticket, grid_style=tf.AlternatingRowGrid(BACK_GREEN, BACK_BLUE)))
 
     def check_variations(self):
         remaining_variation = {}
         try:
+            self.input_num = int(self.input_num)
+        except ValueError:
+            self.input_num = self.input_num
+        try:
             for i in self.variations:
-                if int(self.input_num) in self.variations[i]:
-                    self.variations[i].remove(int(self.input_num))
+                if self.input_num in self.variations[i]:
+                    self.variations[i].remove(self.input_num)
                 remaining_variation[i] = self.variations[i]
                 if len(remaining_variation[i]) == 1:
                     print(fore.LIGHT_BLUE + "Almost there, only one number remaining to claim variation",
@@ -198,7 +212,7 @@ class Verify:
             print(err)
 
 
-def strike_through(num: int) -> str:
+def strike_through(num) -> str:
     result = ''
     for c in str(num):
         result = result + c + '\u0336'
@@ -278,6 +292,14 @@ def main():
     print("Game has ended!\n")
 
 
-if __name__ == '__main__':
-    main()
+def arg_builder():
+    parser = argparse.ArgumentParser(description='KuTe test framework for Yellowstone cluster', prog='kute.py')
+    parser.add_argument('--boardconfig',
+                        help='board config file to get customized housie board')
+    args = parser.parse_args()
+    return args
 
+if __name__ == '__main__':
+    args = arg_builder()
+    print(args.boardconfig)
+    main()

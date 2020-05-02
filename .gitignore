@@ -1,0 +1,12 @@
+# Compiled code
+*.py[cod]
+*.swp
+*.log
+__pycache__/
+!**/__pycache__/
+
+# OS
+.idea
+.DS_Store
+._*
+venv/
