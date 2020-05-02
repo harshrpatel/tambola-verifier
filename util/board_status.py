@@ -21,18 +21,23 @@ class BoardStatus:
         else:
             registered_numbers_set = set(registered_numbers)
 
+        if len(current_board[0]) > 2:
+            ljust_len = 25
+        else:
+            ljust_len = 10
+
         print(colored("BOARD:", "cyan"))
 
         for i, cell in enumerate(current_board):
             if cell in registered_numbers_set:
                 if i % 10 == 9:
-                    print(colored(cell.ljust(10), "green"))
+                    print(colored(cell.ljust(ljust_len), "green"))
                 else:
-                    print(colored(cell.ljust(10), "green"), end=" " * 8)
+                    print(colored(cell.ljust(ljust_len), "green"), end=" ")
             else:
                 if i % 10 == 9:
-                    print(cell.ljust(10))
+                    print(cell.ljust(ljust_len))
                 else:
-                    print(cell.ljust(10), end=" "*8)
+                    print(cell.ljust(ljust_len), end=" ")
 
         print("\nThe numbers came in this order: ", registered_numbers)

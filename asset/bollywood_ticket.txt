@@ -1,0 +1,2 @@
+['Sara Ali Khan', 'Sridevi',  'Madhuri Dixit',  'Hema Malini', 'Rekha', 'Zeenat Aman', 'Katrina Kaif',  'Rani Mukherjee',  'Shilpa Shetty', 'Deepika Padukone', 'Jacqueline Fernandez', 'Madhubala',  'Sholay',  'DDLJ', 'Lagaan', 'Dil to pagal hai', 'Anand',  'Hum apke hai kaun',  '3 Idiots', 'Mr. India']
+{'A': {'Anand',  'Hum apke hai kaun'}, 'B': {'Sara Ali Khan', 'Sridevi'}}
