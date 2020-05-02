@@ -19,3 +19,6 @@ Tambola/Housie/Bingo Ticket and variations verifier
 * Video Demo (Version1 `main.py`)
 
 [![asciicast](https://asciinema.org/a/326050.svg)](https://asciinema.org/a/326050)
+
+* Video Demo (Version2 `main-alternative.py`)
+[![asciicast](https://asciinema.org/a/d6fSu2qelgjwyLbL0j2BA0COH.svg)](https://asciinema.org/a/d6fSu2qelgjwyLbL0j2BA0COH)
