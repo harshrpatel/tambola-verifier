@@ -9,7 +9,7 @@ import tableformatter as tf
 import colored
 from colored import fore, back, style, stylize
 from pprint import pprint
-from colorama import Back
+from colorama import Back, Fore
 from fireworks import run_fireworks
 import constants
 from util.board_stored import BoardStored
@@ -230,17 +230,32 @@ def print_board(numbers_called):
         board_list = BoardStored.my_stored_board
     else:
         board_list = range(1, 91)
-    for i, ele in enumerate(board_list):
-        if str(ele) in numbers_called:
-            if i % 9 == 0:
-                print(fore.GREEN, str(ele).ljust(5))
-            else:
-                print(fore.GREEN, str(ele).ljust(5), end=" " * 8)
-        else:
-            if i % 9 == 0:
-                print(fore.RED, str(ele).ljust(5))
-            else:
-                print(fore.RED, str(ele).ljust(5), end=" " * 8)
+    # board_list = [f'{Fore.GREEN}{str(ele)}' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
+    print(board_list)
+    board_list = ["\033[0;32m"+str(x)+"\033[0;32m" if str(x) in numbers_called else "\033[1;31m"+str(x)+"\033[1;31m" for x in board_list]
+
+    # board_list = [f'\033[3{str(ele)}m\033[0m' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
+
+    # c = Fore.GREEN
+    # np.set_printoptions(formatter={'float': f'{c}{x}'})
+    np_board = np.array(board_list)
+    # print(np_board)
+    final_board = np_board.reshape(10, 9)
+    back_col = back.GREY_15
+    back_col_alt = back.DODGER_BLUE_2
+    print(tf.generate_table(final_board, grid_style=tf.AlternatingRowGrid(back_col, back_col_alt)))
+
+    # for i, ele in enumerate(board_list):
+    #     if str(ele) in numbers_called:
+    #         if i % 9 == 0:
+    #             print(fore.GREEN, str(ele).ljust(5))
+    #         else:
+    #             print(fore.GREEN, str(ele).ljust(5), end=" " * 8)
+    #     else:
+    #         if i % 9 == 0:
+    #             print(fore.RED, str(ele).ljust(5))
+    #         else:
+    #             print(fore.RED, str(ele).ljust(5), end=" " * 8)
 
 
 def main():
