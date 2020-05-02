@@ -152,12 +152,12 @@ class Checker:
     @classmethod
     def verify_input(cls):
         game_over_flag = False
-        first_time_verify_flag = True
         while not game_over_flag:
             try:
                 print("")
                 input_during_game = input("Enter the number from host: ")
                 if input_during_game == "gg":
+                    print(colored("Good Game!!!", "blue"))
                     game_over_flag = True
                 elif input_during_game == "show_order":
                     system("clear")
@@ -184,7 +184,6 @@ class Checker:
             except:
                 print("Not a valid number, please enter a valid number")
                 continue
-
 
     @classmethod
     def did_i_win_yet(cls):
