@@ -12,6 +12,8 @@ from pprint import pprint
 from colorama import Back
 from fireworks import run_fireworks
 import constants
+from util.board_stored import BoardStored
+from util.board_status import BoardStatus
 
 BACK_RESET = Back.RESET
 BACK_GREEN = back.GREY_15
@@ -222,17 +224,23 @@ def strike_through(num) -> str:
 def print_board(numbers_called):
     system("clear")
     print("BOARD")
-    for i in range(1, 91):
-        if str(i) in numbers_called:
-            if i % 10 == 0:
-                print(fore.GREEN, str(i).zfill(2))
+    print("*******", BOARD_CONFIG, "*******")
+    if BOARD_CONFIG is not None:
+        BoardStored.get_from_file(BOARD_CONFIG)
+        board_list = BoardStored.my_stored_board
+    else:
+        board_list = range(1, 91)
+    for i, ele in enumerate(board_list):
+        if str(ele) in numbers_called:
+            if i % 9 == 0:
+                print(fore.GREEN, str(ele).zfill(2))
             else:
-                print(fore.GREEN, str(i).zfill(2), end=" " * 8)
+                print(fore.GREEN, str(ele).zfill(2), end=" " * 8)
         else:
-            if i % 10 == 0:
-                print(fore.RED, str(i).zfill(2))
+            if i % 9 == 0:
+                print(fore.RED, str(ele).zfill(2))
             else:
-                print(fore.RED, str(i).zfill(2), end=" " * 8)
+                print(fore.RED, str(ele).zfill(2), end=" " * 8)
 
 
 def main():
@@ -299,7 +307,8 @@ def arg_builder():
     args = parser.parse_args()
     return args
 
+
 if __name__ == '__main__':
     args = arg_builder()
-    print(args.boardconfig)
+    BOARD_CONFIG = args.boardconfig
     main()
