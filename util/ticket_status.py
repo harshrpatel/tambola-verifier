@@ -30,21 +30,21 @@ class TicketStatus:
         for i, cell in enumerate(ticket):
             if i in [4, 9, 14, 19, 24]:
                 if cell in registered_numbers_set:
-                    print(colored(cls.strike_through(cell.ljust(10)), "red"))
+                    print(colored(cell.ljust(5), "red"))
                 else:
-                    print(cell.ljust(10))
+                    print(cell.ljust(5))
             else:
                 if cell in registered_numbers_set:
-                    print(colored(cls.strike_through(cell.ljust(10)), "red"), end=" "*8)
+                    print(colored(cell.ljust(5), "red"), end=" "*8)
                 else:
-                    print(cell.ljust(10), end=" "*8)
+                    print(cell.ljust(5), end=" "*8)
 
         print(colored("\nPatterns and your numbers:", "cyan"))
         for key, value in patterns_dict.items():
             print(key.ljust(20), end=" ")
             for pattern_value in value:
                 if pattern_value in registered_numbers_set:
-                    print(colored(cls.strike_through(pattern_value), "red"), end=" ")
+                    print(colored(pattern_value, "red"), end=" ")
                 else:
                     print(pattern_value, end=" ")
             print("")

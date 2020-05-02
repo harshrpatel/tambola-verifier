@@ -8,7 +8,6 @@ from termcolor import colored
 
 
 def main():
-
     ticket_path = "asset/cricket.txt"
     board_path = "asset/cricket_board.txt"
 
@@ -32,9 +31,13 @@ def main():
         check_for_valid_ticket = input("Is this your ticket? "
                                        "type yes to confirm and no to generate a new ticket: ")
         if check_for_valid_ticket == "yes":
-            #system("clear")
             print(colored("Cool, we will be using this ticket", "yellow"))
             continue_with_existing_ticket = True
+
+    if continue_with_existing_ticket:
+        pass
+    else:
+        pass
 
     if path.exists(board_path):
         print(colored("There seems to be a ready board", "yellow"))
@@ -42,12 +45,15 @@ def main():
         board_status.initialize(None, board_from_file.my_stored_board)
         board_status.print_board_status()
         check_for_valid_board = input("Is this your board? "
-                                       "type yes to confirm and no to generate a new board: ")
+                                      "type yes to confirm and no to generate a new board: ")
         if check_for_valid_board == "yes":
-            #system("clear")
             print(colored("Cool, we will be using this board", "yellow"))
             continue_with_existing_board = True
 
+    if continue_with_existing_board:
+        pass
+    else:
+        pass
 
 
 if __name__ == '__main__':

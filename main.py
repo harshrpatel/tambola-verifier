@@ -233,14 +233,14 @@ def print_board(numbers_called):
     for i, ele in enumerate(board_list):
         if str(ele) in numbers_called:
             if i % 9 == 0:
-                print(fore.GREEN, str(ele).zfill(2))
+                print(fore.GREEN, str(ele).ljust(5))
             else:
-                print(fore.GREEN, str(ele).zfill(2), end=" " * 8)
+                print(fore.GREEN, str(ele).ljust(5), end=" " * 8)
         else:
             if i % 9 == 0:
-                print(fore.RED, str(ele).zfill(2))
+                print(fore.RED, str(ele).ljust(5))
             else:
-                print(fore.RED, str(ele).zfill(2), end=" " * 8)
+                print(fore.RED, str(ele).ljust(5), end=" " * 8)
 
 
 def main():
