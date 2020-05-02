@@ -2,23 +2,26 @@ from util.ticket_stored import TicketStored
 from util.board_stored import BoardStored
 from util.ticket_status import TicketStatus
 from util.board_status import BoardStatus
+from util.register_input import RegisterInput
 from os import system
 from os import path
 from termcolor import colored
 
 
 def main():
-    ticket_path = "asset/cricket.txt"
+    ticket_path = "asset/cricket_ticket.txt"
     board_path = "asset/cricket_board.txt"
 
     continue_with_existing_ticket = False
     continue_with_existing_board = False
+    game_over_flag = False
 
     ticket_from_file = TicketStored()
     board_from_file = BoardStored()
 
     ticket_status = TicketStatus()
     board_status = BoardStatus()
+    register_input = RegisterInput()
 
     if path.exists(ticket_path):
         print(colored("There seems to be a ticket already generated", "yellow"))
@@ -54,6 +57,29 @@ def main():
         pass
     else:
         pass
+
+    system("clear")
+    board_status.print_board_status()
+    print(colored("\n--------------- Ticket Updates will be shown here --------------------", "green"))
+    print(colored("------------ Sit Back and Relax, We have eyes on it ------------------", "green"))
+    print(colored("------------------------ (-(-_(-_-)_-)-) -----------------------------", "yellow"))
+    ticket_status.print_ticket_status()
+    print(colored("\nStarting the game now....", "yellow"))
+    register_input.initialize(ticket_status.registered_numbers,
+                              board_status.current_board,
+                              ticket_status.pattern_dict_completion_flags,
+                              ticket_status.ticket)
+
+    while not game_over_flag:
+        if register_input.game_over_flag:
+            game_over_flag = True
+            continue
+        if not register_input.command_from_input_flag:
+            system("clear")
+            board_status.print_board_status(register_input.registered_numbers)
+            print(register_input.text_to_display_from_input)
+            ticket_status.print_ticket_status(register_input.registered_numbers)
+        register_input.get_input_and_commands()
 
 
 if __name__ == '__main__':
