@@ -1,3 +1,5 @@
+# demo: https://asciinema.org/a/d6fSu2qelgjwyLbL0j2BA0COH
+
 import ast
 from os import system
 from os import path
@@ -157,7 +159,7 @@ class Checker:
                 print("")
                 input_during_game = input("Enter the number from host: ")
                 if input_during_game == "gg":
-                    print(colored("Good Game!!!", "blue"))
+                    print("༼ つ ◕_◕ ༽つ" + " Good Game " + "༼ つ ◕_◕ ༽つ")
                     game_over_flag = True
                 elif input_during_game == "show_order":
                     system("clear")
@@ -175,8 +177,12 @@ class Checker:
                     if input_number in cls.my_ticket:
                         print(colored("\n--------- Mark the ticket, {} is on your ticket --------".format(input_number),
                                       "yellow"))
+                        print(colored("\n------------------------ ⎦˚◡˚⎣ ------------------------".format(input_number),
+                                      "yellow"))
                     else:
                         print(colored("\n--------- Never Mind, {} was not on your ticket --------".format(input_number),
+                                      "magenta"))
+                        print(colored("\n------------------ ¯\_(ツ)_/¯  -------------------------".format(input_number),
                                       "magenta"))
                     print("")
                     cls.print_status()
@@ -256,7 +262,9 @@ def main():
         checker.get_input_winning_patterns()
         checker.generate_ticket_txt()
     checker.print_board()
-    print(colored("\n-------------Ticket Updates will be shown here ------------------", "green"))
+    print(colored("--------------- Ticket Updates will be shown here --------------------", "green"))
+    print(colored("------------ Sit Back and Relax, We have eyes on it ------------------", "green"))
+    print(colored("------------------------ (-(-_(-_-)_-)-) -----------------------------", "yellow"))
     checker.print_status()
     print(colored("\nStarting the game now....", "yellow"))
     checker.verify_input()
