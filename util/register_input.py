@@ -29,7 +29,7 @@ class RegisterInput:
 
         while not valid_input_provided:
             try:
-                input_during_game = input("\nEnter the number from host: ")
+                input_during_game = input(colored("\nEnter the number from host: ", "blue"))
                 f_list = process.extractBests(input_during_game, cls.current_board, limit=3, score_cutoff=80)
                 f_dict = {}
 
@@ -46,7 +46,7 @@ class RegisterInput:
 
                 elif input_during_game in cls.registered_numbers:
                     cls.text_to_display_from_input = colored("\nThis value was already added and account "
-                                                             "for: {}".format(input_during_game), "blue")
+                                                             "for: {}".format(input_during_game), "magenta")
 
                 elif input_during_game in cls.pattern_dict_completion_flags:
                     cls.command_from_input_flag = True
@@ -58,12 +58,12 @@ class RegisterInput:
                     what_to_remove = input("What do wish to remove, need right spelling and case: ")
                     cls.registered_numbers.remove(what_to_remove)
                     cls.text_to_display_from_input = colored("\nThis is input is removed for "
-                                                             "register inputs: {}".format(what_to_remove), "blue")
+                                                             "register inputs: {}".format(what_to_remove), "magenta")
                 elif input_during_game == "unmark":
                     what_to_unmark = input("What do wish to unmark: ")
                     cls.pattern_dict_completion_flags[what_to_unmark] = True
                     cls.text_to_display_from_input = colored("\nThis is pattern is now unmarked"
-                                                             ": {}".format(what_to_unmark), "blue")
+                                                             ": {}".format(what_to_unmark), "magenta")
 
                 elif input_during_game in cls.current_board:
                     cls.registered_numbers.append(input_during_game)
@@ -74,10 +74,10 @@ class RegisterInput:
                         cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket "
                                                                  "--------".format(input_during_game), "magenta")
                 elif len(f_list) > 0:
-                    print("Did you any of the following?: ")
+                    print(colored("\nDid you any of the following?: ", "blue"))
                     for k, v in f_dict.items():
                         print("type {} for {}".format(k, v))
-                    input_from_fuzzy = int(input("type you choice here: "))
+                    input_from_fuzzy = int(input(colored("\ntype your choice here: ", "blue")))
                     input_during_game = f_dict[input_from_fuzzy]
                     cls.registered_numbers.append(input_during_game)
                     if input_during_game in cls.ticket:
