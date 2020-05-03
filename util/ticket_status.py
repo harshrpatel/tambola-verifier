@@ -49,13 +49,14 @@ class TicketStatus:
 
         print(colored("\nPatterns and your numbers:", "green"))
         for key, value in patterns_dict.items():
-            print(key.ljust(20), end=" ")
-            for pattern_value in value:
-                if pattern_value in registered_numbers_set:
-                    print(colored(pattern_value, "red"), end=" -- ")
-                else:
-                    print(pattern_value, end=" -- ")
-            print("")
+            if not cls.pattern_dict_completion_flags[key]:
+                print(key.ljust(20), end=" ")
+                for pattern_value in value:
+                    if pattern_value in registered_numbers_set:
+                        print(colored(pattern_value, "red"), end=" -- ")
+                    else:
+                        print(pattern_value, end=" -- ")
+                print("")
 
         remaining_for_full_house = set(cls.ticket) - registered_numbers_set
         if len(remaining_for_full_house) == 0:
@@ -65,17 +66,20 @@ class TicketStatus:
             for element in remaining_for_full_house:
                 print(element)
 
-        for k, v in cls.pattern_dict_completion_flags.items():
-            if not v:
-                remaining_for_pattern_completion = cls.pattern_dict[k] - registered_numbers_set
-                if len(remaining_for_pattern_completion) == 0:
-                    print(colored("\n**********************  Congratulations on winning pattern {} "
-                                  "************************".format(k), "green"))
-                    cls.pattern_dict_completion_flags[k] = True
-                if len(cls.pattern_dict[k] - registered_numbers_set) == 1:
-                    print("\nJust on 1 left for winning {} ->".format(k), end= " ")
-                    for element in remaining_for_pattern_completion:
-                        print(element)
+        try:
+            for k, v in cls.pattern_dict_completion_flags.items():
+                if not v:
+                    remaining_for_pattern_completion = cls.pattern_dict[k] - registered_numbers_set
+                    if len(remaining_for_pattern_completion) == 0:
+                        print(colored("\n**********************  Congratulations on winning pattern {} "
+                                      "************************".format(k), "green"))
+                        cls.pattern_dict_completion_flags[k] = True
+                    if len(cls.pattern_dict[k] - registered_numbers_set) == 1:
+                        print("\nJust on 1 left for winning {} ->".format(k), end= " ")
+                        for element in remaining_for_pattern_completion:
+                            print(element)
+        except:
+            pass
 
     @classmethod
     def strike_through(cls, cell):
