@@ -3,14 +3,15 @@ from util.board_stored import BoardStored
 from util.ticket_status import TicketStatus
 from util.board_status import BoardStatus
 from util.register_input import RegisterInput
+import util.excel_data as excelAccess
 from os import system
 from os import path
 from termcolor import colored
 
 
 def main():
-    ticket_path = "asset/cricket_ticket.txt"
-    board_path = "asset/cricket_board.txt"
+    ticket_path = "asset/movies_ticket.txt"
+    board_path = "asset/movies_board.txt"
 
     continue_with_existing_ticket = False
     continue_with_existing_board = False

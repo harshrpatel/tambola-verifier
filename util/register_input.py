@@ -72,12 +72,12 @@ class RegisterInput:
                     if input_during_game in cls.ticket:
                         cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your ticket ---"
                                                                  "-----\n------------------------ ⎦˚◡˚⎣ --------------"
-                                                                 "----------"
+                                                                 "-------------------"
                                                                  .format(input_during_game), "yellow")
                     else:
                         cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket --"
                                                                  "------\n--------------------- ¯\_(ツ)_/¯  "
-                                                                 "--------------------- "
+                                                                 "------------------------------ "
                                                                  .format(input_during_game), "magenta")
                 elif len(f_list) > 0:
 
@@ -95,12 +95,12 @@ class RegisterInput:
                         if input_during_game in cls.ticket:
                             cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your "
                                                                      "ticket --------\n------------------------ ⎦˚◡˚⎣"
-                                                                     " ------------------------ "
+                                                                     " --------------------------------- "
                                                                      .format(input_during_game), "yellow")
                         else:
                             cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your "
                                                                      "ticket --------\n--------------------- ¯\_("
-                                                                     "ツ)_/¯  --------------------- "
+                                                                     "ツ)_/¯  ------------------------------ "
                                                                      .format(input_during_game), "magenta")
                 else:
                     raise
