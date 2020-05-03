@@ -36,7 +36,7 @@ class TicketStatus:
 
         print(colored("My Ticket: ", "cyan"))
         for i, cell in enumerate(ticket):
-            if i in [4, 9, 14, 19, 24]:
+            if (i+1) % 7 == 0:
                 if cell in registered_numbers_set:
                     print(colored(cell.ljust(ljust_len), "red"))
                 else:
