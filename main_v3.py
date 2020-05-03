@@ -1,3 +1,5 @@
+import os
+
 from util.ticket_stored import TicketStored
 from util.board_stored import BoardStored
 from util.ticket_status import TicketStatus
@@ -12,6 +14,7 @@ from termcolor import colored
 def main():
     ticket_path = "asset/movies_ticket.txt"
     board_path = "asset/movies_board.txt"
+    excel_path = "asset/movie.xlsx"
 
     continue_with_existing_ticket = False
     continue_with_existing_board = False
@@ -41,7 +44,19 @@ def main():
     if continue_with_existing_ticket:
         pass
     else:
-        pass
+        system("clear")
+        ask_excel_path = input("Should we be using util/movie.xlsx, type yes to confirm or file path for others: ")
+        if ask_excel_path != "yes":
+            excel_path = ask_excel_path
+        excel_data = excelAccess.get_data_from_excel(excel_path)
+        ticket_status.initialize(None,
+                                 excel_data["ticket"],
+                                 excel_data["patterns"])
+        ticket_status.print_ticket_status()
+        check_for_valid_ticket = input("Is this your ticket? "
+                                       "type yes to confirm and no to generate a new ticket: ")
+        if check_for_valid_ticket == "yes":
+            print(colored("Cool, we will be using this ticket", "yellow"))
 
     if path.exists(board_path):
         print(colored("There seems to be a ready board", "yellow"))
