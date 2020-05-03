@@ -5,7 +5,7 @@ import argparse
 import time
 import numpy as np
 import tableformatter as tf
-# from termcolor import colored, cprint
+from termcolor import colored as COLO
 import colored
 from colored import fore, back, style, stylize
 from pprint import pprint
@@ -14,6 +14,9 @@ from fireworks import run_fireworks
 import constants
 from util.board_stored import BoardStored
 from util.board_status import BoardStatus
+from util.register_input import RegisterInput
+from iterfzf import iterfzf
+from fuzzywuzzy import process
 
 BACK_RESET = Back.RESET
 BACK_GREEN = back.GREY_15
@@ -221,19 +224,15 @@ def strike_through(num) -> str:
     return result
 
 
-def print_board(numbers_called):
+def print_board(numbers_called, board_list):
     system("clear")
     print("BOARD")
     print("*******", BOARD_CONFIG, "*******")
-    if BOARD_CONFIG is not None:
-        BoardStored.get_from_file(BOARD_CONFIG)
-        board_list = BoardStored.my_stored_board
-    else:
-        board_list = range(1, 91)
     # board_list = [f'{Fore.GREEN}{str(ele)}' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
-    print(board_list)
-    board_list = ["\033[0;32m"+str(x)+"\033[0;32m" if str(x) in numbers_called else "\033[1;31m"+str(x)+"\033[1;31m" for x in board_list]
-
+    # import textwrap
+    # wrapped_board_list = ['\n'.join(textwrap.wrap(board)) for board in board_list]
+    # board_list = ["\033[0;32m"+str(x)+"\033[0;32m" if str(x) in numbers_called else "\033[1;31m"+str(x)+"\033[1;31m" for x in wrapped_board_list]
+    board_list = [f'{Fore.GREEN}{str(ele)}' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
     # board_list = [f'\033[3{str(ele)}m\033[0m' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
 
     # c = Fore.GREEN
@@ -241,9 +240,17 @@ def print_board(numbers_called):
     np_board = np.array(board_list)
     # print(np_board)
     final_board = np_board.reshape(10, 9)
-    back_col = back.GREY_15
-    back_col_alt = back.DODGER_BLUE_2
-    print(tf.generate_table(final_board, grid_style=tf.AlternatingRowGrid(back_col, back_col_alt)))
+    from tabulate import tabulate
+    # tabulate.PRESERVE_WHITESPACE = False
+    # tabulate.WIDE_CHARS_MODE = True
+    tt = tabulate(final_board, tablefmt="fancy_grid")
+    # tt = tabulate(final_board, tablefmt="html")
+    # with open("board.html", "w") as fd:
+    #     fd.write(tt)
+    print(tt)
+    # back_col = back.GREY_15
+    # back_col_alt = back.DODGER_BLUE_2
+    # print(tf.generate_table(final_board, grid_style=tf.AlternatingRowGrid(back_col, back_col_alt)))
 
     # for i, ele in enumerate(board_list):
     #     if str(ele) in numbers_called:
@@ -283,28 +290,55 @@ def main():
         checker.generate_ticket_txt()
     checker.print_status()
     my_ticket = checker.my_ticket
+    my_ticket = constants.ticket
     sorted_list = checker.sorted_ticket
     variation_dict = checker.patterns_dict
-    # time.sleep(2)
-    # system("clear")
-    # print(my_ticket)
     game_not_ended = True
     global done_variation
     done_variation = dict.fromkeys(variation_dict.keys(), False)
     previous_numbers = []
-    while game_not_ended:
+    if BOARD_CONFIG is not None:
+        BoardStored.get_from_file(BOARD_CONFIG)
+        board_list = BoardStored.my_stored_board
+        BOARD_TYPE = "custom"
+    else:
+        board_list = range(1, 91)
+        BOARD_TYPE = "regular"
+    reg_input = RegisterInput()
+    reg_input.initialize(current_board=board_list, ticket=sorted_list)
 
+    while game_not_ended:
         input_num = input("Enter any number:")
         if input_num == "bye":
             game_not_ended = False
-            continue
+            exit(0)
         if str(input_num) in variation_dict.keys():
             del variation_dict[str(input_num)]
             continue
+        if BOARD_TYPE is "regular" and input_num != "board":
+            if int(input_num) in board_list:
+                input_num = input_num
+        else:
+            if input_num in board_list:
+                input_num = input_num
+            else:
+                input_num_list = process.extractBests(input_num, board_list, limit=3, score_cutoff=80)
+                f_dict = dict()
+                if len(input_num_list) > 0:
+                    for i, t in enumerate(input_num_list):
+                        f_dict[i + 1] = t[0]
+                    for k, v in f_dict.items():
+                        print("type {} for {}".format(k, v))
+                    input_from_fuzzy = int(input(COLO("\ntype your choice here or 0 for none: ", "blue")))
+                    if input_from_fuzzy == 0:
+                        pass
+                    else:
+                        input_num = f_dict[input_from_fuzzy]
+            # input_num = iterfzf(board_list, multi=False, extended=False)
         system("clear")
         previous_numbers.append(input_num)
         if input_num == "board":
-            print_board(previous_numbers)
+            print_board(previous_numbers, board_list)
             continue
         print(fore.LIGHT_BLUE, style.BLINK, "Numbers called out so far: ", previous_numbers[::-1], style.RESET, "\n")
         verify = Verify(sorted_list, list(my_ticket), input_num, pattern_dict=variation_dict)
