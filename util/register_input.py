@@ -43,7 +43,7 @@ class RegisterInput:
                     cls.registered_numbers = []
 
                 if input_during_game == "gg":
-                    print("༼ つ ◕_◕ ༽つ" + " Good Game " + "༼ つ ◕_◕ ༽つ")
+                    print("\n༼ つ ◕_◕ ༽つ" + " Good Game " + "༼ つ ◕_◕ ༽つ\n")
                     cls.game_over_flag = True
 
                 elif input_during_game in cls.registered_numbers:
@@ -70,11 +70,15 @@ class RegisterInput:
                 elif input_during_game in cls.current_board:
                     cls.registered_numbers.append(input_during_game)
                     if input_during_game in cls.ticket:
-                        cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your ticket "
-                                                                 "--------".format(input_during_game), "yellow")
+                        cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your ticket ---"
+                                                                 "-----\n------------------------ ⎦˚◡˚⎣ --------------"
+                                                                 "-------------------"
+                                                                 .format(input_during_game), "yellow")
                     else:
-                        cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket "
-                                                                 "--------".format(input_during_game), "magenta")
+                        cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your ticket --"
+                                                                 "------\n--------------------- ¯\_(ツ)_/¯  "
+                                                                 "------------------------------ "
+                                                                 .format(input_during_game), "magenta")
                 elif len(f_list) > 0:
 
                     print(colored("\nDid you any of the following?: ", "blue"))
@@ -90,12 +94,14 @@ class RegisterInput:
                         cls.registered_numbers.append(input_during_game)
                         if input_during_game in cls.ticket:
                             cls.text_to_display_from_input = colored("\n--------- Mark the ticket, {} is on your "
-                                                                     "ticket --------".format(input_during_game),
-                                                                     "yellow")
+                                                                     "ticket --------\n------------------------ ⎦˚◡˚⎣"
+                                                                     " --------------------------------- "
+                                                                     .format(input_during_game), "yellow")
                         else:
                             cls.text_to_display_from_input = colored("\n--------- Never Mind, {} was not on your "
-                                                                     "ticket --------".format(input_during_game),
-                                                                     "magenta")
+                                                                     "ticket --------\n--------------------- ¯\_("
+                                                                     "ツ)_/¯  ------------------------------ "
+                                                                     .format(input_during_game), "magenta")
                 else:
                     raise
 

@@ -30,12 +30,12 @@ class BoardStatus:
 
         for i, cell in enumerate(current_board):
             if cell in registered_numbers_set:
-                if i % 10 == 9:
+                if (i+1) % 5 == 0:
                     print(colored(cell.ljust(ljust_len), "green"))
                 else:
                     print(colored(cell.ljust(ljust_len), "green"), end=" ")
             else:
-                if i % 10 == 9:
+                if (i+1) % 5 == 0:
                     print(cell.ljust(ljust_len))
                 else:
                     print(cell.ljust(ljust_len), end=" ")
