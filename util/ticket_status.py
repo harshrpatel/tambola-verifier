@@ -34,7 +34,7 @@ class TicketStatus:
         else:
             ljust_len = 5
 
-        print(colored("My Ticket: ", "cyan"))
+        print(colored("My Ticket: ", "green"))
         for i, cell in enumerate(ticket):
             if (i+1) % 7 == 0:
                 if cell in registered_numbers_set:
@@ -47,7 +47,7 @@ class TicketStatus:
                 else:
                     print(cell.ljust(ljust_len), end=" "*8)
 
-        print(colored("\nPatterns and your numbers:", "cyan"))
+        print(colored("\nPatterns and your numbers:", "green"))
         for key, value in patterns_dict.items():
             print(key.ljust(20), end=" ")
             for pattern_value in value:
@@ -59,7 +59,7 @@ class TicketStatus:
 
         remaining_for_full_house = set(cls.ticket) - registered_numbers_set
         if len(remaining_for_full_house) == 0:
-            print("Congratulations on winning house")
+            print("******************** Congratulations on winning house **********************")
         if len(remaining_for_full_house) == 1:
             print("\nJust 1 left for winning trophy, remaining ->", end=" ")
             for element in remaining_for_full_house:
@@ -69,7 +69,8 @@ class TicketStatus:
             if not v:
                 remaining_for_pattern_completion = cls.pattern_dict[k] - registered_numbers_set
                 if len(remaining_for_pattern_completion) == 0:
-                    print("\nCongratulations on winning pattern {}".format(k))
+                    print(colored("\n**********************  Congratulations on winning pattern {} "
+                                  "************************".format(k), "green"))
                     cls.pattern_dict_completion_flags[k] = True
                 if len(cls.pattern_dict[k] - registered_numbers_set) == 1:
                     print("\nJust on 1 left for winning {} ->".format(k), end= " ")
