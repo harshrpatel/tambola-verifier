@@ -7,8 +7,9 @@ NUMPY_SHAPE = {
     15: (5, 3),
     16: (4, 4),
     20: (4, 5),
+    24: (4, 6),
     25: (5, 5),
     28: (7, 4)
 }
 
-ticket = ['Mr India', 'Yeh Jawani Hai Deewani', 'Student Of The Year', 'Gully Boy', 'Karthik Aryan', 'Salman Khan', 'Akshay Kumar', 'Varun Dhawan', 'Deepika Padukone', 'Alia Bhatt', 'Sara Ali Khan', 'Kajol', 'Prem Chopra', 'Shakti Kapoor', 'Sonu Sood', 'Amrish Puri', 'Kishore Kumar', 'Neha Kakkar', 'Arijit Singh', 'Udit Narayan', 'Sooraj Barjatya', 'Rohit Shetty', 'Imtiaz Ali', 'Subhash Ghai', 'RD Burman', 'Pritam', 'Laxmikant Pyarelal', 'A.R. Rehman']
+ticket = ['Mad Tea Party', 'Fast & Furious', 'Simba', 'Candy Floss Stall', 'Minnie Ear Hats', 'Tale Spin', 'Shrek 4D', 'Harry Potter Journey', 'Donald Duck', 'Hawaiian Whip Stalls', 'Keychains', 'Kung Fu Panda', 'Popoye’s Mini Train', 'Jurassic World Ride', 'Cinderella', 'Mickey Waffles', 'Disney Balloons', 'Beauty & the beast', 'Jungle Cruise', 'Pirates of the Caribbean', 'Winnie the pooh', 'Apple Candies', 'Pandora  Charms', 'The Jungle Book']
