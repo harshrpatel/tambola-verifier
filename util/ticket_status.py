@@ -53,9 +53,9 @@ class TicketStatus:
                 print(key.ljust(20), end=" ")
                 for pattern_value in value:
                     if pattern_value in registered_numbers_set:
-                        print(colored(pattern_value, "red"), end=" -- ")
+                        print(colored(pattern_value, "red"), end=colored(" || ", "cyan"))
                     else:
-                        print(pattern_value, end=" -- ")
+                        print(pattern_value, end=colored(" || ", "cyan"))
                 print("")
 
         remaining_for_full_house = set(cls.ticket) - registered_numbers_set
