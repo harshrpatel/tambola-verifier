@@ -26,16 +26,16 @@ class BoardStatus:
         else:
             ljust_len = 10
 
-        print(colored("BOARD:", "cyan"))
+        print(colored("BOARD:", "green"))
 
         for i, cell in enumerate(current_board):
             if cell in registered_numbers_set:
-                if (i+1) % 5 == 0:
-                    print(colored(cell.ljust(ljust_len), "green"))
+                if (i+1) % 6 == 0:
+                    print(colored(cell.ljust(ljust_len), "cyan"))
                 else:
-                    print(colored(cell.ljust(ljust_len), "green"), end=" ")
+                    print(colored(cell.ljust(ljust_len), "cyan"), end=" ")
             else:
-                if (i+1) % 5 == 0:
+                if (i+1) % 6 == 0:
                     print(cell.ljust(ljust_len))
                 else:
                     print(cell.ljust(ljust_len), end=" ")

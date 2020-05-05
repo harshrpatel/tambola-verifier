@@ -12,9 +12,10 @@ from termcolor import colored
 
 
 def main():
-    ticket_path = "asset/movies_ticket.txt"
-    board_path = "asset/movies_board.txt"
-    excel_path = "asset/movie.xlsx"
+    ticket_path = "asset/parks_ticket.txt"
+    board_path = "asset/parks_board.txt"
+    excel_path = "asset/parks.xlsx"
+
 
     continue_with_existing_ticket = False
     continue_with_existing_board = False
