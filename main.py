@@ -232,7 +232,7 @@ def print_board(numbers_called, board_list):
     # import textwrap
     # wrapped_board_list = ['\n'.join(textwrap.wrap(board)) for board in board_list]
     # board_list = ["\033[0;32m"+str(x)+"\033[0;32m" if str(x) in numbers_called else "\033[1;31m"+str(x)+"\033[1;31m" for x in wrapped_board_list]
-    board_list = [f'{Fore.GREEN}{str(ele)}' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
+    board_list = [f'{Fore.GREEN}{str(ele)}' if ele in numbers_called else f'{Fore.BLUE}{str(ele)}' for ele in board_list]
     # board_list = [f'\033[3{str(ele)}m\033[0m' if ele in numbers_called else f'{Fore.RED}{str(ele)}' for ele in board_list]
 
     # c = Fore.GREEN
