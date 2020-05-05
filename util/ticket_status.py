@@ -1,5 +1,5 @@
 from termcolor import colored
-
+from os import system
 
 class TicketStatus:
     registered_numbers = list()
@@ -36,7 +36,7 @@ class TicketStatus:
 
         print(colored("My Ticket: ", "green"))
         for i, cell in enumerate(ticket):
-            if (i+1) % 7 == 0:
+            if (i+1) % 6 == 0:
                 if cell in registered_numbers_set:
                     print(colored(cell.ljust(ljust_len), "red"))
                 else:
@@ -72,7 +72,8 @@ class TicketStatus:
                     remaining_for_pattern_completion = cls.pattern_dict[k] - registered_numbers_set
                     if len(remaining_for_pattern_completion) == 0:
                         print(colored("\n**********************  Congratulations on winning pattern {} "
-                                      "************************".format(k), "green"))
+                                      "************************\n".format(k), "green"))
+                        system("echo '\x1B]1337;RequestAttention=fireworks\007'")
                         cls.pattern_dict_completion_flags[k] = True
                     if len(cls.pattern_dict[k] - registered_numbers_set) == 1:
                         print("\nJust on 1 left for winning {} ->".format(k), end= " ")

@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_data_from_excel(file_path="asset/movie_ticket.xlsx"):
+def get_data_from_excel(file_path="asset/parks.xlsx"):
     response_dict = {}
     df = pd.read_excel(file_path, sheet_name="Sheet1")
 
@@ -23,7 +23,7 @@ def get_data_from_excel(file_path="asset/movie_ticket.xlsx"):
 
     response_dict["patterns"] = t_dict
 
-    with open("asset/movies_ticket.txt", 'w') as f:
+    with open("asset/parks_ticket.txt", 'w') as f:
         f.write(str(response_dict["ticket"]) + "\n")
         f.write(str(response_dict["patterns"]))
     return response_dict
